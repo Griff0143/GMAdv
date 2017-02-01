@@ -1,0 +1,47 @@
+Information about object: obj_bee
+
+Sprite: spr_bee_fly_right
+Solid: false
+Visible: true
+Depth: 0
+Persistent: false
+Parent: obj_enemy
+Mask: <same as sprite>
+
+Create Event:
+set variable state to ESTATE_MOVE
+set variable facing to FACE_LEFT
+set variable targetx to 0
+set Alarm 0 to 5
+
+Destroy Event:
+set variable global.die_sprite_index to spr_bee_die
+call the inherited event of the parent object
+
+Alarm Event for alarm 0:
+if state is equal to ESTATE_WAIT
+      set variable state to ESTATE_MOVE
+      set Alarm 0 to 5
+else
+      set variable state to ESTATE_WAIT
+      set Alarm 0 to 30
+
+ Step Event:
+if state is equal to ESTATE_MOVE
+      if x is larger than obj_zool.x
+            set variable targetx to obj_zool.x+32
+      else
+            set variable targetx to obj_zool.x-32
+      if point_distance(x,y,obj_zool.x,obj_zool.y) is smaller than 256
+            perform a step towards position (targetx,obj_zool.y) with speed 10 avoiding all instances
+if x is larger than obj_zool.x
+      set variable facing to FACE_LEFT
+else
+      set variable facing to FACE_RIGHT
+
+Draw Event:
+if facing is equal to FACE_LEFT
+      at relative position (0,0) draw image -1 of sprite spr_bee_fly_left
+if facing is equal to FACE_RIGHT
+      at relative position (0,0) draw image -1 of sprite spr_bee_fly_right
+
